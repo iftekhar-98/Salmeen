@@ -17,7 +17,7 @@ from model import SafetyScoreCalculator, RiskPredictor, AICoach
 
 # Page configuration
 st.set_page_config(
-    page_title="سلمين - منصة السلامة المرورية",
+    page_title="سالمين - منصة السلامة المرورية",
     page_icon="🚗",
     layout="wide",
     initial_sidebar_state="expanded"
