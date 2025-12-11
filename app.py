@@ -284,7 +284,7 @@ def create_risk_heatmap(df):
 
 def user_profile_page():
     """Citizen/User Profile View"""
-    st.title("🚗 سلمين - ملفك الشخصي")
+    st.title(" سلمين - ملفك الشخصي")
     st.markdown("---")
     
     # Load data
@@ -294,7 +294,7 @@ def user_profile_page():
     # User info
     col1, col2 = st.columns([1, 3])
     with col1:
-        st.markdown("### 👤 المستخدم")
+        st.markdown("###  المستخدم")
         st.markdown("**الاسم:** عبدالله محمد")
         st.markdown("**رقم الهوية:** ************1234")
         st.markdown("**نوع الرخصة:** خاصة")
@@ -308,7 +308,7 @@ def user_profile_page():
         # Risk prediction
         risk_prediction = predictor.predict(recent_data)
         
-        st.markdown("### 📊 الإحصائيات السريعة")
+        st.markdown("###  الإحصائيات السريعة")
         metric_col1, metric_col2, metric_col3, metric_col4 = st.columns(4)
         
         with metric_col1:
@@ -327,7 +327,7 @@ def user_profile_page():
     st.markdown("---")
     
     # Safety Score Gauge
-    st.markdown("### 🎯 درجة السلامة الحالية")
+    st.markdown("###  درجة السلامة الحالية")
     gauge_fig = create_gauge_chart(safety_score)
     st.plotly_chart(gauge_fig, use_container_width=True)
     
@@ -344,7 +344,7 @@ def user_profile_page():
     st.markdown("---")
     
     # Score History
-    st.markdown("### 📈 تاريخ درجة السلامة")
+    st.markdown("###  تاريخ درجة السلامة")
     history_fig = create_score_history_chart(recent_data, days=30)
     if history_fig:
         st.plotly_chart(history_fig, use_container_width=True)
@@ -354,7 +354,7 @@ def user_profile_page():
     st.markdown("---")
     
     # AI Coach Recommendations
-    st.markdown("### 🤖 المدرب الذكي - توصيات مخصصة")
+    st.markdown("###  المدرب الذكي - توصيات مخصصة")
     recommendations = coach.generate_recommendations(recent_data, safety_score)
     
     for i, rec in enumerate(recommendations, 1):
@@ -363,7 +363,7 @@ def user_profile_page():
     st.markdown("---")
     
     # Recent Activity
-    st.markdown("### 📋 النشاط الأخير")
+    st.markdown("###  النشاط الأخير")
     recent_activity = recent_data.tail(10)[['date', 'location_name', 'speed_kmh', 'violation_type']].copy()
     recent_activity.columns = ['التاريخ', 'الموقع', 'السرعة (كم/س)', 'نوع المخالفة']
     st.dataframe(recent_activity, use_container_width=True, hide_index=True)
@@ -371,7 +371,7 @@ def user_profile_page():
 
 def ministry_dashboard_page():
     """Ministry/Government Dashboard View"""
-    st.title("🏛️ لوحة التحكم - وزارة الداخلية")
+    st.title(" لوحة التحكم - وزارة الداخلية")
     st.markdown("---")
     
     # Load data
@@ -379,7 +379,7 @@ def ministry_dashboard_page():
     calculator, predictor, coach = load_models(df)
     
     # Key Metrics
-    st.markdown("### 📊 المؤشرات الرئيسية")
+    st.markdown("###  المؤشرات الرئيسية")
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -403,7 +403,7 @@ def ministry_dashboard_page():
     st.markdown("---")
     
     # Heatmap
-    st.markdown("### 🗺️ خريطة المناطق عالية الخطورة - الرياض")
+    st.markdown("###  خريطة المناطق عالية الخطورة - الرياض")
     
     heatmap = create_risk_heatmap(df)
     if heatmap:
@@ -414,7 +414,7 @@ def ministry_dashboard_page():
     st.markdown("---")
     
     # Top Risk Locations
-    st.markdown("### 📍 أكثر المناطق خطورة")
+    st.markdown("###  أكثر المناطق خطورة")
     
     risk_data = df[
         ((df['speed_kmh'] > df['speed_limit']) | 
@@ -447,7 +447,7 @@ def ministry_dashboard_page():
     st.markdown("---")
     
     # Violation Types Distribution
-    st.markdown("### 📊 توزيع أنواع المخالفات")
+    st.markdown("###  توزيع أنواع المخالفات")
     
     violations = df[df['violation_type'] != 'لا يوجد']
     violation_counts = violations['violation_type'].value_counts().reset_index()
@@ -467,7 +467,7 @@ def ministry_dashboard_page():
     st.markdown("---")
     
     # Time Series Analysis
-    st.markdown("### 📅 تحليل المخالفات عبر الزمن")
+    st.markdown("###  تحليل المخالفات عبر الزمن")
     
     df['date'] = pd.to_datetime(df['date'])
     daily_violations = df[df['violation_type'] != 'لا يوجد'].groupby('date').size().reset_index(name='عدد المخالفات')
@@ -497,19 +497,19 @@ def main():
     """Main application"""
     
     # Sidebar
-    st.sidebar.title("🚗 سلمين")
+    st.sidebar.title(" سالمين")
     st.sidebar.markdown("### منصة السلامة المرورية الذكية")
     st.sidebar.markdown("---")
     
     # Navigation
     page = st.sidebar.radio(
         "اختر الصفحة:",
-        ["👤 الملف الشخصي", "🏛️ لوحة التحكم الوزارية"],
+        [" الملف الشخصي", " لوحة التحكم الوزارية"],
         index=0
     )
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### ℹ️ عن المنصة")
+    st.sidebar.markdown("###  عن المنصة")
     st.sidebar.info(
         "سلمين هي منصة ذكية لتعزيز السلامة المرورية في المملكة العربية السعودية. "
         "تستخدم الذكاء الاصطناعي لتقييم سلوك القيادة وتقديم توصيات مخصصة."
@@ -521,7 +521,7 @@ def main():
     st.sidebar.markdown("**متكامل مع:** أبشر")
     
     # Route to selected page
-    if page == "👤 الملف الشخصي":
+    if page == " الملف الشخصي":
         user_profile_page()
     else:
         ministry_dashboard_page()
