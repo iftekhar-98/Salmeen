@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# --- 1. CONFIGURATION & STYLING ---
+# --- 1. إعدادات الصفحة والتصميم ---
 st.set_page_config(
     page_title="سالمين | Salmeen",
     page_icon="🛡️",
@@ -14,10 +14,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS (Global Styles + Dashboard Design)
+# Custom CSS
 st.markdown("""
     <style>
-        /* Import Arabic Font */
+        /* استيراد الخط العربي */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
         
         html, body, [class*="css"] {
@@ -36,7 +36,7 @@ st.markdown("""
         
         h1, h2, h3, h4, h5 { color: var(--primary-green) !important; }
         
-        /* Buttons Style */
+        /* تصميم الأزرار */
         div.stButton > button {
             width: 100%; border-radius: 15px; height: 3em;
             background-color: var(--primary-green); color: white; border: none;
@@ -44,7 +44,7 @@ st.markdown("""
         }
         div.stButton > button:hover { background-color: var(--secondary-orange); color: var(--primary-green); }
         
-        /* --- Landing Page Cards --- */
+        /* --- بطاقات الصفحة الرئيسية --- */
         .landing-card {
             background-color: white;
             border: 2px solid var(--primary-green);
@@ -68,7 +68,7 @@ st.markdown("""
         .card-title { font-size: 26px; font-weight: bold; color: var(--primary-green); }
         .card-desc { font-size: 15px; color: var(--text-taupe); margin-top: 10px; }
 
-        /* --- Dashboard/Profile Cards --- */
+        /* --- بطاقات لوحة القيادة (Dashboard Cards) --- */
         .dashboard-card {
             background-color: white;
             border-radius: 20px;
@@ -76,14 +76,16 @@ st.markdown("""
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #eee;
             margin-bottom: 20px;
-            height: 100%; /* For full height in columns */
+            height: 100%;
             transition: 0.3s;
+            text-align: center; /* المحتوى الداخلي في المنتصف */
         }
         .dashboard-card:hover {
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
 
+        /* عناوين البطاقات (يمين) */
         .card-header {
             font-size: 18px;
             font-weight: bold;
@@ -91,9 +93,12 @@ st.markdown("""
             color: var(--primary-green);
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
+            text-align: right !important; /* إجبار العنوان لليمين */
+            width: 100%;
+            display: block;
         }
 
-        /* --- Score Circle --- */
+        /* --- دائرة المؤشر (Score) --- */
         .score-container {
             text-align: center;
             padding: 20px;
@@ -115,24 +120,25 @@ st.markdown("""
             margin-top: 10px;
         }
 
-        /* --- Control Panel (Simulator) --- */
+        /* --- لوحة التحكم (Simulator) --- */
         .control-panel {
             background-color: #F8F9FA;
             border-radius: 15px;
             padding: 20px;
             border: 1px dashed var(--primary-green);
             margin-bottom: 30px;
+            text-align: right;
         }
 
-        /* Remove Sidebar */
+        /* إخفاء القائمة الجانبية */
         [data-testid="stSidebar"] { display: none; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. REAL AI MODEL (TRAINING) ---
+# --- 2. بناء وتدريب نموذج الذكاء الاصطناعي ---
 @st.cache_resource
 def train_model():
-    # Generate Synthetic Training Data (1000 records)
+    # توليد بيانات تدريب افتراضية (1000 سجل)
     np.random.seed(42)
     n_samples = 1000
     
@@ -142,12 +148,14 @@ def train_model():
     
     X = pd.DataFrame({'speed': speed, 'braking': braking, 'peak_hour': peak_hour})
     y = []
+    # منطق التصنيف (Ground Truth Logic)
     for i in range(n_samples):
-        risk = 0 # Safe
-        if speed[i] > 120 or braking[i] > 5: risk = 2 # High
-        elif speed[i] > 100 or braking[i] > 3: risk = 1 # Medium
+        risk = 0 # آمن
+        if speed[i] > 120 or braking[i] > 5: risk = 2 # عالي الخطورة
+        elif speed[i] > 100 or braking[i] > 3: risk = 1 # متوسط
         y.append(risk)
         
+    # تدريب النموذج
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     model = RandomForestClassifier(n_estimators=50)
     model.fit(X_train, y_train)
@@ -155,10 +163,10 @@ def train_model():
     acc = accuracy_score(y_test, model.predict(X_test))
     return model, acc
 
-# Load Model
+# تحميل النموذج عند بدء التشغيل
 model, accuracy = train_model()
 
-# --- 3. HELPER FUNCTIONS ---
+# --- 3. دوال مساعدة ---
 def get_risk_label(risk_code):
     if risk_code == 2: return "عالي الخطورة 🔴", "خفف السرعة فوراً!"
     if risk_code == 1: return "متوسط 🟠", "انتبه لمسافة الأمان."
@@ -181,15 +189,15 @@ def simulate_action_plans(risk_code):
             {"type": "نصيحة", "text": "حافظ على هذا المستوى لخصم التأمين."}
         ]
 
-# --- 4. NAVIGATION LOGIC ---
+# --- 4. منطق التنقل ---
 if 'page' not in st.session_state: st.session_state['page'] = 'home'
 def navigate_to(page): st.session_state['page'] = page; st.rerun()
 
 # ==========================================
-# PAGE 1: LANDING PAGE (HOME)
+# الصفحة 1: الرئيسية (Landing Page)
 # ==========================================
 if st.session_state['page'] == 'home':
-    # Logo Area
+    # منطقة الشعار
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if os.path.exists("assets/logosalmeen.png"):
@@ -201,7 +209,7 @@ if st.session_state['page'] == 'home':
     st.write("")
     st.write("")
 
-    # Cards Area
+    # البطاقات الكبيرة
     c1, c_space, c2 = st.columns([1, 0.1, 1])
     
     with c1:
@@ -227,11 +235,11 @@ if st.session_state['page'] == 'home':
             navigate_to('ministry')
 
 # ==========================================
-# PAGE 2: CITIZEN PROFILE (THE DASHBOARD)
+# الصفحة 2: الملف الشخصي (Citizen Profile)
 # ==========================================
 elif st.session_state['page'] == 'citizen':
     
-    # Header Area
+    # الشريط العلوي
     c1, c2, c3 = st.columns([1, 4, 1])
     with c1:
         if st.button("🏠 الرئيسية", use_container_width=True):
@@ -252,7 +260,7 @@ elif st.session_state['page'] == 'citizen':
 
     st.write("") 
 
-    # Control Panel (Simulator)
+    # لوحة التحكم (المحاكي)
     st.markdown("##### 🎛️ محاكي الذكاء الاصطناعي (تحكم في بياناتك)")
     with st.container():
         st.markdown('<div class="control-panel">', unsafe_allow_html=True)
@@ -263,19 +271,19 @@ elif st.session_state['page'] == 'citizen':
             user_braking = st.slider("عدد مرات الفرملة المفاجئة", 0, 10, 2)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # AI Processing
+    # معالجة الذكاء الاصطناعي
     user_input = [[user_speed, user_braking, 1]]
     prediction_code = model.predict(user_input)[0]
     risk_label, risk_advice = get_risk_label(prediction_code)
     
-    # Calculate Score
+    # حساب النقاط
     current_score = int(max(0, min(100, 100 - (user_speed/2.2) - (user_braking * 3))))
     
-    # Dynamic Colors
+    # الألوان الديناميكية
     score_color = "#124641" if current_score > 70 else "#FD9E19"
     if current_score < 50: score_color = "#D32F2F"
 
-    # Big Score Circle
+    # دائرة المؤشر الكبيرة
     st.markdown(f"""
         <div class="score-container" style="border-color: {score_color};">
             <div class="score-number" style="color: {score_color};">{current_score}</div>
@@ -283,11 +291,12 @@ elif st.session_state['page'] == 'citizen':
         </div>
     """, unsafe_allow_html=True)
     
-    # Smart Coach Columns
-    st.subheader("المدرب الذكي (تحليل شامل)")
+    # المدرب الذكي (الأعمدة الثلاثة)
+    st.markdown('<h3 style="text-align: right; color: #124641;">المدرب الذكي (تحليل شامل)</h3>', unsafe_allow_html=True)
+    
     row1_1, row1_2, row1_3 = st.columns(3)
     
-    # Card 1: Behavioral
+    # البطاقة 1: السلوك
     with row1_1:
         st.markdown(f"""
             <div class="dashboard-card">
@@ -299,7 +308,7 @@ elif st.session_state['page'] == 'citizen':
             </div>
         """, unsafe_allow_html=True)
 
-    # Card 2: Predictive
+    # البطاقة 2: التنبؤ
     with row1_2:
         risk_border = "#124641" if prediction_code == 0 else "#FD9E19"
         if prediction_code == 2: risk_border = "#D32F2F"
@@ -316,13 +325,13 @@ elif st.session_state['page'] == 'citizen':
             </div>
         """, unsafe_allow_html=True)
 
-    # Card 3: Action Plan
+    # البطاقة 3: الخطة
     with row1_3:
         plans = simulate_action_plans(prediction_code)
         plans_html = ""
         for p in plans:
             plans_html += f"""
-            <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; border-right: 3px solid #124641;">
+            <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; border-right: 3px solid #124641; text-align: right;">
                 <strong style="color:#124641;">{p['type']}</strong><br>
                 <span style="font-size:13px; color:#555;">{p['text']}</span>
             </div>
@@ -335,7 +344,7 @@ elif st.session_state['page'] == 'citizen':
         """, unsafe_allow_html=True)
 
 # ==========================================
-# PAGE 3: MINISTRY DASHBOARD
+# الصفحة 3: لوحة الوزارة (Ministry Dashboard)
 # ==========================================
 elif st.session_state['page'] == 'ministry':
     if st.button("🏠 الرئيسية"): navigate_to('home')
@@ -347,7 +356,7 @@ elif st.session_state['page'] == 'ministry':
     k3.metric("تنبؤات الحوادث", "143")
     
     st.subheader("الخريطة الحرارية للمخاطر المتوقعة")
-    # Generate random points around Riyadh
+    # توليد نقاط عشوائية حول الرياض
     map_data = pd.DataFrame(
         np.random.randn(100, 2) / [50, 50] + [24.7136, 46.6753],
         columns=['lat', 'lon']
