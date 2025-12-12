@@ -318,7 +318,7 @@ elif st.session_state['page'] == 'citizen':
             <div class="dashboard-card" style="border: 2px solid {risk_border};">
                 <div class="card-header" style="color: {risk_border};">2. توقع المخاطر</div>
                 <div style="font-size: 40px; text-align: center; margin-bottom: 10px;">🔮</div>
-                <p style="text-align:center; font-weight:bold; font-size:18px; color: {risk_border};">
+                <p style="text-align:center; font-weight:bold; font-size:22px; color: {risk_border};">
                     {risk_label}
                 </p>
                 <hr style="margin: 10px 0;">
@@ -334,7 +334,7 @@ elif st.session_state['page'] == 'citizen':
             plans_html += f"""
             <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; border-right: 3px solid #124641; text-align: right;">
                 <strong style="color:#124641;">{p['type']}</strong><br>
-                <span style="font-size:13px; color:#555;">{p['text']}</span>
+                <span style="font-size:22px; color:#555;">{p['text']}</span>
             </div>
             """ 
         st.markdown(f"""
