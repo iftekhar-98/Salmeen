@@ -88,7 +88,7 @@ st.markdown("""
 
         
         .card-header {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             margin-bottom: 15px;
             color: var(--primary-green);
