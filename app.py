@@ -322,7 +322,7 @@ elif st.session_state['page'] == 'citizen':
                     {risk_label}
                 </p>
                 <hr style="margin: 10px 0;">
-                <p style="font-size: 14px;"><strong>السبب المحتمل:</strong><br>{risk_advice}</p>
+                <p style="font-size: 22px;"><strong>السبب المحتمل:</strong><br>{risk_advice}</p>
             </div>
         """, unsafe_allow_html=True)
 
