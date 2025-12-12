@@ -209,7 +209,6 @@ The score starts at 100 and deducts points based on:
 
 ##  المطور | Developer
 
-Built as a hackathon MVP by a Senior Python Full-Stack Engineer.
 
 **Technologies Demonstrated:**
 - ✅ Streamlit for rapid prototyping
@@ -231,14 +230,7 @@ This is a hackathon MVP project for demonstration purposes.
 
 - **وزارة الداخلية السعودية** | Saudi Ministry of Interior
 - **منصة أبشر** | Absher Platform
-- **Streamlit Community**
-- **Plotly & PyDeck Teams**
 
----
-
-##  التواصل | Contact
-
-For questions or collaboration opportunities, please reach out through the hackathon platform.
 
 ---
 
