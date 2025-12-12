@@ -140,7 +140,7 @@ def train_model():
 
 model, accuracy = train_model()
 
-# --- 4. دوال مساعدة ---
+
 def get_risk_label(risk_code):
     if risk_code == 2: return "عالي الخطورة 🔴", "خفف السرعة فوراً!"
     if risk_code == 1: return "متوسط 🟠", "انتبه لمسافة الأمان."
@@ -177,7 +177,7 @@ if st.session_state['page'] == 'home':
         
     st.markdown(f"""
         <div class="city-ticker">
-            🏙️ مؤشر سلامة الرياض اليوم: <span style="color: #FD9E19; font-size: 20px;">{city_score} نقطة</span>
+            🏙️ مؤشر التزام الرياض اليوم: <span style="color: #FD9E19; font-size: 20px;">{city_score} نقطة</span>
         </div>
     """, unsafe_allow_html=True)
     
@@ -317,7 +317,7 @@ elif st.session_state['page'] == 'ministry':
     # --- التعديل 3: استقبال بيانات المواطن ---
     user_status = st.session_state['user_status']
     
-    # إذا كان المواطن (أنت) متهوراً، يظهر تأثير ذلك هنا
+    
     total_violations = 1243
     city_safety = 84
     
@@ -332,7 +332,7 @@ elif st.session_state['page'] == 'ministry':
         st.markdown(f"""<div class="metric-card"><div class="metric-label">إجمالي المخالفات (اليوم)</div><div class="metric-value">{total_violations}</div><div class="metric-delta {'negative' if user_status['risk_level']==2 else 'positive'}">{'↑ زيادة' if user_status['risk_level']==2 else '↓ تحسن'}</div></div>""", unsafe_allow_html=True)
         
     with k2:
-        st.markdown(f"""<div class="metric-card" style="border-right-color: #FD9E19;"><div class="metric-label">مؤشر السلامة العام</div><div class="metric-value">{city_safety}%</div><div class="metric-delta {'negative' if user_status['risk_level']==2 else 'positive'}">{'↓ انخفاض' if user_status['risk_level']==2 else '↑ ارتفاع'}</div></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div class="metric-card" style="border-right-color: #FD9E19;"><div class="metric-label">مؤشر الالتزام العام</div><div class="metric-value">{city_safety}%</div><div class="metric-delta {'negative' if user_status['risk_level']==2 else 'positive'}">{'↓ انخفاض' if user_status['risk_level']==2 else '↑ ارتفاع'}</div></div>""", unsafe_allow_html=True)
 
     with k3:
         st.markdown("""<div class="metric-card"><div class="metric-label">دقة تنبؤات AI</div><div class="metric-value">99.2%</div><div class="metric-delta positive">✔ نظام مستقر</div></div>""", unsafe_allow_html=True)
