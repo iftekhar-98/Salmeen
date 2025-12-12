@@ -17,7 +17,7 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
     <style>
-        
+        /* استيراد الخط العربي */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
         
         html, body, [class*="css"] {
@@ -36,7 +36,7 @@ st.markdown("""
         
         h1, h2, h3, h4, h5 { color: var(--primary-green) !important; }
         
-        
+        /* تصميم الأزرار */
         div.stButton > button {
             width: 100%; border-radius: 15px; height: 3em;
             background-color: var(--primary-green); color: white; border: none;
@@ -44,7 +44,7 @@ st.markdown("""
         }
         div.stButton > button:hover { background-color: var(--secondary-orange); color: var(--primary-green); }
         
-        
+        /* --- بطاقات الصفحة الرئيسية --- */
         .landing-card {
             background-color: white;
             border: 2px solid var(--primary-green);
@@ -78,15 +78,15 @@ st.markdown("""
             margin-bottom: 20px;
             height: 100%;
             transition: 0.3s;
-            text-align: center; 
-            font-size: 22px
+            text-align: center; /* المحتوى الداخلي في المنتصف */
+            font-size: 22px; /* تكبير الخط العام */
         }
         .dashboard-card:hover {
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
 
-        
+        /* عناوين البطاقات (يمين) */
         .card-header {
             font-size: 24px;
             font-weight: bold;
@@ -94,7 +94,7 @@ st.markdown("""
             color: var(--primary-green);
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
-            text-align: right !important; 
+            text-align: right !important; /* إجبار العنوان لليمين */
             width: 100%;
             display: block;
         }
@@ -131,7 +131,37 @@ st.markdown("""
             text-align: right;
         }
 
-        
+        /* --- بطاقات المؤشرات (KPIs) للوزارة --- */
+        .metric-card {
+            background: linear-gradient(to bottom left, #ffffff, #f0fdf4);
+            border-right: 5px solid var(--primary-green);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+        .metric-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .metric-value { font-size: 36px; font-weight: 800; color: var(--primary-green); }
+        .metric-label { font-size: 16px; color: var(--text-taupe); margin-bottom: 5px; }
+        .metric-delta { font-size: 14px; font-weight: bold; background-color: #e8f5e9; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+        .positive { color: #2e7d32; background-color: #e8f5e9; }
+        .negative { color: #c62828; background-color: #ffebee; }
+
+        /* --- شريط التنبيهات للوزارة --- */
+        .alert-box {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-right: 4px solid var(--secondary-orange);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        /* إخفاء القائمة الجانبية */
         [data-testid="stSidebar"] { display: none; }
     </style>
 """, unsafe_allow_html=True)
@@ -139,7 +169,6 @@ st.markdown("""
 # --- 2. بناء وتدريب نموذج الذكاء الاصطناعي ---
 @st.cache_resource
 def train_model():
-    # توليد بيانات تدريب افتراضية (1000 سجل)
     np.random.seed(42)
     n_samples = 1000
     
@@ -149,14 +178,13 @@ def train_model():
     
     X = pd.DataFrame({'speed': speed, 'braking': braking, 'peak_hour': peak_hour})
     y = []
-    # منطق التصنيف (Ground Truth Logic)
+    # منطق التصنيف
     for i in range(n_samples):
-        risk = 0 # آمن
-        if speed[i] > 120 or braking[i] > 5: risk = 2 # عالي الخطورة
-        elif speed[i] > 100 or braking[i] > 3: risk = 1 # متوسط
+        risk = 0 
+        if speed[i] > 120 or braking[i] > 5: risk = 2 
+        elif speed[i] > 100 or braking[i] > 3: risk = 1 
         y.append(risk)
         
-    # تدريب النموذج
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     model = RandomForestClassifier(n_estimators=50)
     model.fit(X_train, y_train)
@@ -164,7 +192,6 @@ def train_model():
     acc = accuracy_score(y_test, model.predict(X_test))
     return model, acc
 
-# تحميل النموذج عند بدء التشغيل
 model, accuracy = train_model()
 
 # --- 3. دوال مساعدة ---
@@ -198,7 +225,6 @@ def navigate_to(page): st.session_state['page'] = page; st.rerun()
 # الصفحة 1: الرئيسية (Landing Page)
 # ==========================================
 if st.session_state['page'] == 'home':
-    # منطقة الشعار
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if os.path.exists("assets/logosalmeen.png"):
@@ -210,7 +236,6 @@ if st.session_state['page'] == 'home':
     st.write("")
     st.write("")
 
-    # البطاقات الكبيرة
     c1, c_space, c2 = st.columns([1, 0.1, 1])
     
     with c1:
@@ -240,7 +265,6 @@ if st.session_state['page'] == 'home':
 # ==========================================
 elif st.session_state['page'] == 'citizen':
     
-    # الشريط العلوي
     c1, c2, c3 = st.columns([1, 4, 1])
     with c1:
         if st.button("🏠 الرئيسية", use_container_width=True):
@@ -261,7 +285,6 @@ elif st.session_state['page'] == 'citizen':
 
     st.write("") 
 
-    # لوحة التحكم (المحاكي)
     st.markdown("##### 🎛️ محاكي الذكاء الاصطناعي (تحكم في بياناتك)")
     with st.container():
         st.markdown('<div class="control-panel">', unsafe_allow_html=True)
@@ -272,19 +295,15 @@ elif st.session_state['page'] == 'citizen':
             user_braking = st.slider("عدد مرات الفرملة المفاجئة", 0, 10, 2)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # معالجة الذكاء الاصطناعي
     user_input = [[user_speed, user_braking, 1]]
     prediction_code = model.predict(user_input)[0]
     risk_label, risk_advice = get_risk_label(prediction_code)
     
-    # حساب النقاط
     current_score = int(max(0, min(100, 100 - (user_speed/2.2) - (user_braking * 3))))
     
-    # الألوان الديناميكية
     score_color = "#124641" if current_score > 70 else "#FD9E19"
     if current_score < 50: score_color = "#D32F2F"
 
-    # دائرة المؤشر الكبيرة
     st.markdown(f"""
         <div class="score-container" style="border-color: {score_color};">
             <div class="score-number" style="color: {score_color};">{current_score}</div>
@@ -292,12 +311,10 @@ elif st.session_state['page'] == 'citizen':
         </div>
     """, unsafe_allow_html=True)
     
-    # المدرب الذكي (الأعمدة الثلاثة)
     st.markdown('<h3 style="text-align: right; color: #124641;">المدرب الذكي (تحليل شامل)</h3>', unsafe_allow_html=True)
     
     row1_1, row1_2, row1_3 = st.columns(3)
     
-    # البطاقة 1: السلوك
     with row1_1:
         st.markdown(f"""
             <div class="dashboard-card">
@@ -309,7 +326,6 @@ elif st.session_state['page'] == 'citizen':
             </div>
         """, unsafe_allow_html=True)
 
-    # البطاقة 2: التنبؤ
     with row1_2:
         risk_border = "#124641" if prediction_code == 0 else "#FD9E19"
         if prediction_code == 2: risk_border = "#D32F2F"
@@ -318,23 +334,22 @@ elif st.session_state['page'] == 'citizen':
             <div class="dashboard-card" style="border: 2px solid {risk_border};">
                 <div class="card-header" style="color: {risk_border};">2. توقع المخاطر</div>
                 <div style="font-size: 40px; text-align: center; margin-bottom: 10px;">🔮</div>
-                <p style="text-align:center; font-weight:bold; font-size:22px; color: {risk_border};">
+                <p style="text-align:center; font-weight:bold; font-size:28px; color: {risk_border};">
                     {risk_label}
                 </p>
                 <hr style="margin: 10px 0;">
-                <p style="font-size: 22px;"><strong>السبب المحتمل:</strong><br>{risk_advice}</p>
+                <p style="font-size: 18px;"><strong>السبب المحتمل:</strong><br>{risk_advice}</p>
             </div>
         """, unsafe_allow_html=True)
 
-    # البطاقة 3: الخطة
     with row1_3:
         plans = simulate_action_plans(prediction_code)
         plans_html = ""
         for p in plans:
             plans_html += f"""
             <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; border-right: 3px solid #124641; text-align: right;">
-                <strong style="color:#124641;">{p['type']}</strong><br>
-                <span style="font-size:22px; color:#555;">{p['text']}</span>
+                <strong style="color:#124641; font-size: 18px;">{p['type']}</strong><br>
+                <span style="font-size:16px; color:#555;">{p['text']}</span>
             </div>
             """ 
         st.markdown(f"""
@@ -345,21 +360,101 @@ elif st.session_state['page'] == 'citizen':
         """, unsafe_allow_html=True)
 
 # ==========================================
-# الصفحة 3: لوحة الوزارة (Ministry Dashboard)
+# الصفحة 3: لوحة الوزارة (Redesigned Ministry Dashboard)
 # ==========================================
 elif st.session_state['page'] == 'ministry':
-    if st.button("🏠 الرئيسية"): navigate_to('home')
-    st.header("لوحة التحكم الاستراتيجية")
     
-    k1, k2, k3 = st.columns(3)
-    k1.metric("دقة نموذج AI", f"{accuracy*100:.1f}%")
-    k2.metric("متوسط السرعة", "94 كم/س")
-    k3.metric("تنبؤات الحوادث", "143")
+    c1, c2 = st.columns([1, 5])
+    with c1:
+        if st.button("🏠 الرئيسية", use_container_width=True):
+            navigate_to('home')
+    with c2:
+        st.markdown(f"""
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin:0;">لوحة القيادة الاستراتيجية | غرفة العمليات</h2>
+                <span style="background: #e0f2f1; color: #124641; padding: 5px 15px; border-radius: 15px; font-weight: bold;">
+                    🔴 مباشر | Live
+                </span>
+            </div>
+        """, unsafe_allow_html=True)
     
-    st.subheader("الخريطة الحرارية للمخاطر المتوقعة")
-    # توليد نقاط عشوائية حول الرياض
-    map_data = pd.DataFrame(
-        np.random.randn(100, 2) / [50, 50] + [24.7136, 46.6753],
-        columns=['lat', 'lon']
-    )
-    st.map(map_data)
+    st.write("")
+    st.markdown("### 📊 المؤشرات العامة للمدينة (Real-Time KPIs)")
+
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        st.markdown("""
+            <div class="metric-card">
+                <div class="metric-label">إجمالي المخالفات (اليوم)</div>
+                <div class="metric-value">1,243</div>
+                <div class="metric-delta positive">↓ 5% تحسن</div>
+            </div>
+        """, unsafe_allow_html=True)
+        
+    with k2:
+        st.markdown(f"""
+            <div class="metric-card" style="border-right-color: #FD9E19;">
+                <div class="metric-label">مؤشر السلامة العام</div>
+                <div class="metric-value">84%</div>
+                <div class="metric-delta positive">↑ 2% ارتفاع</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with k3:
+        st.markdown("""
+            <div class="metric-card">
+                <div class="metric-label">دقة تنبؤات AI</div>
+                <div class="metric-value">99.2%</div>
+                <div class="metric-delta positive">✔ نظام مستقر</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with k4:
+        st.markdown("""
+            <div class="metric-card" style="border-right-color: #D32F2F;">
+                <div class="metric-label">مناطق عالية الخطورة</div>
+                <div class="metric-value">3</div>
+                <div class="metric-delta negative">⚠ تتطلب تدخل</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    st.divider()
+
+    col_main, col_side = st.columns([2, 1])
+
+    with col_main:
+        st.markdown("##### 🗺️ الخريطة الحرارية للمخاطر وتوزيع المناطق")
+        map_data = pd.DataFrame(np.random.randn(200, 2) / [50, 50] + [24.7136, 46.6753], columns=['lat', 'lon'])
+        st.map(map_data, zoom=10, use_container_width=True)
+        
+        st.write("")
+        st.markdown("##### 📈 تحليل المخالفات حسب الأحياء (أعلى 5)")
+        chart_data = pd.DataFrame({'المخالفات': [120, 95, 80, 45, 30], 'الحي': ['الملقا', 'النرجس', 'الياسمين', 'العليا', 'النخيل']}).set_index('الحي')
+        st.bar_chart(chart_data, color="#124641")
+
+    with col_side:
+        st.markdown("##### 🚨 سجل التنبيهات الحية (Live Feed)")
+        alerts = [
+            {"time": "الآن", "msg": "تنبؤ بازدحام شديد في طريق الملك فهد", "type": "warning"},
+            {"time": "منذ 5 د", "msg": "ارتفاع مؤشر التهور في حي النرجس", "type": "danger"},
+            {"time": "منذ 12 د", "msg": "تم تحسين انسيابية الحركة في المطار", "type": "success"},
+            {"time": "منذ 20 د", "msg": "انخفاض الرؤية الأفقية (غبار)", "type": "warning"},
+            {"time": "منذ 35 د", "msg": "حادث محتمل تم تجنبه (AI Alert)", "type": "success"},
+        ]
+        
+        for alert in alerts:
+            border_c = "#FD9E19"
+            if alert['type'] == 'danger': border_c = "#D32F2F"
+            if alert['type'] == 'success': border_c = "#124641"
+            st.markdown(f"""
+                <div class="alert-box" style="border-right-color: {border_c};">
+                    <strong style="color: {border_c};">{alert['time']}</strong><br>
+                    {alert['msg']}
+                </div>
+            """, unsafe_allow_html=True)
+        
+        st.write("")
+        st.markdown("##### 📉 توزيع مستويات الخطر")
+        st.caption("نسبة السائقين الملتزمين vs المتهورين")
+        dist_data = pd.DataFrame({'النسبة': [70, 20, 10]}, index=['آمن', 'متوسط', 'خطر'])
+        st.bar_chart(dist_data, horizontal=True, color=["#124641"])
