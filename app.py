@@ -17,7 +17,7 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
     <style>
-        /* استيراد الخط العربي */
+        
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
         
         html, body, [class*="css"] {
@@ -36,7 +36,7 @@ st.markdown("""
         
         h1, h2, h3, h4, h5 { color: var(--primary-green) !important; }
         
-        /* تصميم الأزرار */
+        
         div.stButton > button {
             width: 100%; border-radius: 15px; height: 3em;
             background-color: var(--primary-green); color: white; border: none;
@@ -44,7 +44,7 @@ st.markdown("""
         }
         div.stButton > button:hover { background-color: var(--secondary-orange); color: var(--primary-green); }
         
-        /* --- بطاقات الصفحة الرئيسية --- */
+        
         .landing-card {
             background-color: white;
             border: 2px solid var(--primary-green);
@@ -78,14 +78,15 @@ st.markdown("""
             margin-bottom: 20px;
             height: 100%;
             transition: 0.3s;
-            text-align: center; /* المحتوى الداخلي في المنتصف */
+            text-align: center; 
+            font-size: 18px
         }
         .dashboard-card:hover {
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
 
-        /* عناوين البطاقات (يمين) */
+        
         .card-header {
             font-size: 18px;
             font-weight: bold;
@@ -93,7 +94,7 @@ st.markdown("""
             color: var(--primary-green);
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
-            text-align: right !important; /* إجبار العنوان لليمين */
+            text-align: right !important; 
             width: 100%;
             display: block;
         }
@@ -130,7 +131,7 @@ st.markdown("""
             text-align: right;
         }
 
-        /* إخفاء القائمة الجانبية */
+        
         [data-testid="stSidebar"] { display: none; }
     </style>
 """, unsafe_allow_html=True)
