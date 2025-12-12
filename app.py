@@ -79,7 +79,7 @@ st.markdown("""
             height: 100%;
             transition: 0.3s;
             text-align: center; 
-            font-size: 18px
+            font-size: 22px
         }
         .dashboard-card:hover {
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
